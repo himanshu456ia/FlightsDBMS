@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
+import flights_backend as fbe
+import passengers_backend as pbe
+import os
 
 def clear_frame(root):
     for widget in root.winfo_children():
@@ -14,7 +17,12 @@ class Starting_window:
         window_height = self.root.winfo_screenheight()
         self.root.geometry(f"{window_width//4}x{window_height//3}")
         self.root.resizable(width=False, height=False)
-        
+
+        if not os.path.isfile("Databases/flights.db"):
+            fbe.init_db()
+        # if not os.path.isfile("Databases/passengers.db"):
+        #     pbe.init_db()
+
         # Frame
         main_frame = tk.Frame(self.root)
         main_frame.pack(fill='both', expand=True)
@@ -81,6 +89,19 @@ class Flight_window(Starting_window):
         self.root = starting_window.root
         self.root.title("Flights Enquiry Database")
         self.root.geometry("1260x720")
+
+        btn = tk.Button(self.root, text='SHOW', command=self.show_data)
+        btn.pack()
+    
+    def show_data(self):
+        i=0
+        for row in fbe.ViewAllData():
+            # print(1)
+            print(row)
+            i+=1
+            if i==10:
+                break
+
 
 class Passenger_window(Starting_window):
     def __init__(self, starting_window):
