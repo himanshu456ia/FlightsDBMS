@@ -12,7 +12,7 @@ class Starting_window:
         self.root.title("Flight Database")
         window_width = self.root.winfo_screenwidth()
         window_height = self.root.winfo_screenheight()
-        self.root.geometry(f"{window_width//4}x{window_height//4}")
+        self.root.geometry(f"{window_width//4}x{window_height//3}")
         self.root.resizable(width=False, height=False)
         
         # Frame
