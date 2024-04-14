@@ -66,3 +66,13 @@ def ViewAllData():
     rows=cur.fetchall()
     con.close()
     return rows
+
+def SearchForData(FlightNo="", Day="", Month="", Year="", SchedDeptTime="", SchedArrTime="", DeptTime="", ArrTime="", AirTime="", Origin="", Dest="", Tailnum="", CarrierShort="", CarrierName=""):
+    con=sqlite3.connect(flights_db)    
+    cur=con.cursor()
+    cur.execute("SELECT * FROM Flight f inner join Dates d using(date_idx) inner join Aircraft a using(tailnum) inner join Carrier c using(carrier_name) \
+                WHERE flight=? OR day=? OR month=? OR year=? OR sched_dep_time=? OR dep_time=? OR sched_arr_time=? OR arr_time=? OR air_time=? OR origin=? OR dest=? OR tailnum=? OR carrier_name=? OR full_name LIKE \"%?%\"", 
+                [FlightNo, Day, Month, Year, SchedDeptTime, SchedArrTime, DeptTime, ArrTime, AirTime, Origin, Dest, Tailnum, CarrierShort, CarrierName])
+    rows=cur.fetchall()
+    con.close()
+    return rows

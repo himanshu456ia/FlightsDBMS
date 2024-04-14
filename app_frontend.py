@@ -90,9 +90,118 @@ class Flight_window(Starting_window):
         self.root.title("Flights Enquiry Database")
         self.root.geometry("1260x720")
 
-        btn = tk.Button(self.root, text='SHOW', command=self.show_data)
-        btn.pack()
-    
+        FlightNo=tk.IntVar()
+        Day=tk.IntVar()
+        Month=tk.IntVar()
+        Year=tk.IntVar()
+        SchedDeptTime=tk.IntVar()
+        SchedArrTime=tk.IntVar()
+        DeptTime=tk.IntVar()
+        ArrTime=tk.IntVar()
+        AirTime=tk.IntVar()
+        Origin=tk.StringVar()
+        Dest=tk.StringVar()
+        Tailnum=tk.StringVar()
+        CarrierShort=tk.StringVar()
+        CarrierName=tk.StringVar()
+
+        # Frames
+        main_frame = tk.Frame(self.root)
+        main_frame.pack(fill='both', expand=True)
+
+        title_frame = tk.Frame(main_frame)
+        title_frame.columnconfigure(0, weight=1)
+        title_frame.rowconfigure(0,weight=1)
+        title_frame.pack(fill='x')
+
+        data_frame = tk.Frame(main_frame, padx=10, pady=5)
+        data_frame.columnconfigure(0, weight=2)
+        data_frame.columnconfigure(1, weight=3)
+        data_frame.rowconfigure(0, weight=1)
+        data_frame.pack(fill='both', expand=True)
+        data_frame_left = tk.Frame(data_frame,bg='green')
+        data_frame_right = tk.Frame(data_frame,bg='red')
+        data_frame_left.grid(row=0, column=0, sticky='nwes')
+        data_frame_right.grid(row=0, column=1, sticky='nwes')
+
+        btn_frame = tk.Frame(main_frame)
+        btn_frame.pack(fill='x', expand=True, side='bottom')
+
+        # Labels and Entryboxes
+        self.lblTitle = tk.Label(title_frame, text="Flight Enquiry System", font='Arial 20 bold')
+        self.lblTitle.grid(row=0, column=0, sticky='nwes')
+
+        self.lblFlightno = tk.Label(data_frame_left, text="Flight No: ", padx=10, pady=5)
+        self.lblFlightno.grid(row=0, column=0, sticky='w')
+        self.txtFlightno = tk.Entry(data_frame_left, textvariable=FlightNo, width=20)
+        self.txtFlightno.grid(row=0, column=1)
+
+        self.lblDay = tk.Label(data_frame_left, text="Day: ", padx=10, pady=5)
+        self.lblDay.grid(row=1, column=0, sticky='w')
+        self.txtDay = tk.Entry(data_frame_left, textvariable=Day, width=20)
+        self.txtDay.grid(row=1, column=1)
+
+        self.lblMonth = tk.Label(data_frame_left, text="Month: ", padx=10, pady=5)
+        self.lblMonth.grid(row=2, column=0, sticky='w')
+        self.txtMonth = tk.Entry(data_frame_left, textvariable=Month, width=20)
+        self.txtMonth.grid(row=2, column=1)
+
+        self.lblYear = tk.Label(data_frame_left, text="Year: ", padx=10, pady=5)
+        self.lblYear.grid(row=3, column=0, sticky='w')
+        self.txtYear = tk.Entry(data_frame_left, textvariable=Year, width=20)
+        self.txtYear.grid(row=3, column=1)
+
+        self.lblSchedDeptTime = tk.Label(data_frame_left, text="SchedDeptTime: ", padx=10, pady=5)
+        self.lblSchedDeptTime.grid(row=4, column=0, sticky='w')
+        self.txtSchedDeptTime = tk.Entry(data_frame_left, textvariable=SchedDeptTime, width=20)
+        self.txtSchedDeptTime.grid(row=4, column=1)
+
+        self.lblSchedArrTime = tk.Label(data_frame_left, text="SchedArrTime: ", padx=10, pady=5)
+        self.lblSchedArrTime.grid(row=5, column=0, sticky='w')
+        self.txtSchedArrTime = tk.Entry(data_frame_left, textvariable=SchedArrTime, width=20)
+        self.txtSchedArrTime.grid(row=5, column=1)
+
+        self.lblDeptTime = tk.Label(data_frame_left, text="DeptTime: ", padx=10, pady=5)
+        self.lblDeptTime.grid(row=6, column=0, sticky='w')
+        self.txtDeptTime = tk.Entry(data_frame_left, textvariable=DeptTime, width=20)
+        self.txtDeptTime.grid(row=6, column=1)
+
+        self.lblArrTime = tk.Label(data_frame_left, text="ArrTime: ", padx=10, pady=5)
+        self.lblArrTime.grid(row=7, column=0, sticky='w')
+        self.txtArrTime = tk.Entry(data_frame_left, textvariable=ArrTime, width=20)
+        self.txtArrTime.grid(row=7, column=1)
+
+        self.lblAirTime = tk.Label(data_frame_left, text="AirTime: ", padx=10, pady=5)
+        self.lblAirTime.grid(row=8, column=0, sticky='w')
+        self.txtAirTime = tk.Entry(data_frame_left, textvariable=AirTime, width=20)
+        self.txtAirTime.grid(row=8, column=1)
+
+        self.lblOrigin = tk.Label(data_frame_left, text="Origin: ", padx=10, pady=5)
+        self.lblOrigin.grid(row=9, column=0, sticky='w')
+        self.txtOrigin = tk.Entry(data_frame_left, textvariable=Origin, width=20)
+        self.txtOrigin.grid(row=9, column=1)
+
+        self.lblDest = tk.Label(data_frame_left, text="Dest: ", padx=10, pady=5)
+        self.lblDest.grid(row=10, column=0, sticky='w')
+        self.txtDest = tk.Entry(data_frame_left, textvariable=Dest, width=20)
+        self.txtDest.grid(row=10, column=1)
+
+        self.lblTailnum = tk.Label(data_frame_left, text="Tailnum: ", padx=10, pady=5)
+        self.lblTailnum.grid(row=11, column=0, sticky='w')
+        self.txtTailnum = tk.Entry(data_frame_left, textvariable=Tailnum, width=20)
+        self.txtTailnum.grid(row=11, column=1)
+
+        self.lblCarrierShort = tk.Label(data_frame_left, text="CarrierShort: ", padx=10, pady=5)
+        self.lblCarrierShort.grid(row=12, column=0, sticky='w')
+        self.txtCarrierShort = tk.Entry(data_frame_left, textvariable=CarrierShort, width=20)
+        self.txtCarrierShort.grid(row=12, column=1)
+
+        self.lblCarrierName = tk.Label(data_frame_left, text="CarrierName: ", padx=10, pady=5)
+        self.lblCarrierName.grid(row=13, column=0, sticky='w')
+        self.txtCarrierName = tk.Entry(data_frame_left, textvariable=CarrierName, width=20)
+        self.txtCarrierName.grid(row=13, column=1)
+
+
     def show_data(self):
         i=0
         for row in fbe.ViewAllData():
