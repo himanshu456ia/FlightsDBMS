@@ -30,7 +30,7 @@ class Starting_window:
         title_frame = tk.Frame(main_frame, bg='gray')
         title_frame.columnconfigure(0, weight=1)
         title_frame.rowconfigure(0,weight=1)
-        title_frame.pack(fill='both', expand=True, padx=10, pady=5)
+        title_frame.pack(fill='both', expand=True, padx=5, pady=3)
 
         query_frame = tk.Frame(main_frame)
         query_frame.columnconfigure(0, weight=1)
@@ -43,11 +43,11 @@ class Starting_window:
         # action_frame.columnconfigure(0, weight=5)
         # action_frame.columnconfigure(1, weight=1)
         # action_frame.columnconfigure(2, weight=1)
-        action_frame.pack(side='bottom', fill='x', padx=10, pady=5)
+        action_frame.pack(side='bottom', fill='x', padx=5, pady=3)
 
         # Labels
         self.lbl_title = tk.Label(title_frame, text="Flight Enquiry System", font='Arial 20 bold')
-        self.lbl_title.grid(row=0, column=0, sticky='nwes', padx=10, pady=5)
+        self.lbl_title.grid(row=0, column=0, sticky='nwes', padx=5, pady=3)
 
         self.query_title = tk.Label(query_frame, text="What would you like to enquire about?", font='Arial 12')
         self.query_title.grid(row=0, columnspan=2, sticky='nsew')
@@ -90,20 +90,41 @@ class Flight_window(Starting_window):
         self.root.title("Flights Enquiry Database")
         self.root.geometry("1260x720")
 
-        FlightNo=tk.IntVar()
-        Day=tk.IntVar()
-        Month=tk.IntVar()
-        Year=tk.IntVar()
-        SchedDeptTime=tk.IntVar()
-        SchedArrTime=tk.IntVar()
-        DeptTime=tk.IntVar()
-        ArrTime=tk.IntVar()
-        AirTime=tk.IntVar()
+        FlightNo=tk.StringVar()
+        Day=tk.StringVar()
+        Month=tk.StringVar()
+        Year=tk.StringVar()
+        SchedDeptTime=tk.StringVar()
+        SchedArrTime=tk.StringVar()
         Origin=tk.StringVar()
         Dest=tk.StringVar()
         Tailnum=tk.StringVar()
         CarrierShort=tk.StringVar()
         CarrierName=tk.StringVar()
+        headers=['FlightNo', 'Date_Index', 'Scheduled_Dept_Time', 'Dept_Time', 'Scheduled_Arr_Time', 'Arr_Time', 'Air_Time', 'Origin', 'Destination', 'Tail No', 'Day', 'Month', 'Year', 'Carrier_Short', 'Carrier_Name']
+        DataList = [FlightNo,Day,Month,Year,SchedDeptTime,SchedArrTime,Origin,Dest,Tailnum,CarrierShort,CarrierName]
+        ColNameList = ['flightno', 'day', 'month', 'year', 'scheduled_dept_time', 'scheduled_arr_time', 'origin', 'dest', 'tailnum', "carrier_name", 'full_name']
+
+        def viewflightdb():
+            FlightList.delete(1, tk.END)
+            for row in fbe.ViewAllData():
+                FlightList.insert(tk.END, row)
+        def searchflightdb():
+            FlightList.delete(1, tk.END)
+            SearchTerm = {}
+            for Name, Data in zip(ColNameList, DataList):
+                if Data.get()!='':
+                    SearchTerm[Name] = Data.get()
+            for row in fbe.SearchForData(SearchTerm):
+                FlightList.insert(tk.END, row)
+        
+        def flightdatafill(event):
+            global sd
+            searchflight = FlightList.curselection()[0]
+            sd = FlightList.get(searchflight)
+            info_to_show = 'Data in Record:\n' + '\n'.join([a+": "+b for a, b in zip(headers, sd)])
+            messagebox.showinfo(title="Selected Record", message=info_to_show)
+
 
         # Frames
         main_frame = tk.Frame(self.root)
@@ -114,13 +135,15 @@ class Flight_window(Starting_window):
         title_frame.rowconfigure(0,weight=1)
         title_frame.pack(fill='x')
 
-        data_frame = tk.Frame(main_frame, padx=10, pady=5)
+        data_frame = tk.Frame(main_frame, padx=5, pady=3)
         data_frame.columnconfigure(0, weight=2)
         data_frame.columnconfigure(1, weight=3)
         data_frame.rowconfigure(0, weight=1)
         data_frame.pack(fill='both', expand=True)
         data_frame_left = tk.Frame(data_frame,bg='green')
         data_frame_right = tk.Frame(data_frame,bg='red')
+        data_frame_right.rowconfigure(0, weight=1)
+        data_frame_right.columnconfigure(0, weight=1)
         data_frame_left.grid(row=0, column=0, sticky='nwes')
         data_frame_right.grid(row=0, column=1, sticky='nwes')
 
@@ -131,85 +154,78 @@ class Flight_window(Starting_window):
         self.lblTitle = tk.Label(title_frame, text="Flight Enquiry System", font='Arial 20 bold')
         self.lblTitle.grid(row=0, column=0, sticky='nwes')
 
-        self.lblFlightno = tk.Label(data_frame_left, text="Flight No: ", padx=10, pady=5)
+        self.lblFlightno = tk.Label(data_frame_left, text="Flight No: ", padx=5, pady=3)
         self.lblFlightno.grid(row=0, column=0, sticky='w')
         self.txtFlightno = tk.Entry(data_frame_left, textvariable=FlightNo, width=20)
         self.txtFlightno.grid(row=0, column=1)
 
-        self.lblDay = tk.Label(data_frame_left, text="Day: ", padx=10, pady=5)
+        self.lblDay = tk.Label(data_frame_left, text="Day: ", padx=5, pady=3)
         self.lblDay.grid(row=1, column=0, sticky='w')
         self.txtDay = tk.Entry(data_frame_left, textvariable=Day, width=20)
         self.txtDay.grid(row=1, column=1)
 
-        self.lblMonth = tk.Label(data_frame_left, text="Month: ", padx=10, pady=5)
+        self.lblMonth = tk.Label(data_frame_left, text="Month: ", padx=5, pady=3)
         self.lblMonth.grid(row=2, column=0, sticky='w')
         self.txtMonth = tk.Entry(data_frame_left, textvariable=Month, width=20)
         self.txtMonth.grid(row=2, column=1)
 
-        self.lblYear = tk.Label(data_frame_left, text="Year: ", padx=10, pady=5)
+        self.lblYear = tk.Label(data_frame_left, text="Year: ", padx=5, pady=3)
         self.lblYear.grid(row=3, column=0, sticky='w')
         self.txtYear = tk.Entry(data_frame_left, textvariable=Year, width=20)
         self.txtYear.grid(row=3, column=1)
 
-        self.lblSchedDeptTime = tk.Label(data_frame_left, text="SchedDeptTime: ", padx=10, pady=5)
+        self.lblSchedDeptTime = tk.Label(data_frame_left, text="Scheduled Dept Time: ", padx=5, pady=3)
         self.lblSchedDeptTime.grid(row=4, column=0, sticky='w')
         self.txtSchedDeptTime = tk.Entry(data_frame_left, textvariable=SchedDeptTime, width=20)
         self.txtSchedDeptTime.grid(row=4, column=1)
 
-        self.lblSchedArrTime = tk.Label(data_frame_left, text="SchedArrTime: ", padx=10, pady=5)
+        self.lblSchedArrTime = tk.Label(data_frame_left, text="Scheduled Arrival Time: ", padx=5, pady=3)
         self.lblSchedArrTime.grid(row=5, column=0, sticky='w')
         self.txtSchedArrTime = tk.Entry(data_frame_left, textvariable=SchedArrTime, width=20)
         self.txtSchedArrTime.grid(row=5, column=1)
 
-        self.lblDeptTime = tk.Label(data_frame_left, text="DeptTime: ", padx=10, pady=5)
-        self.lblDeptTime.grid(row=6, column=0, sticky='w')
-        self.txtDeptTime = tk.Entry(data_frame_left, textvariable=DeptTime, width=20)
-        self.txtDeptTime.grid(row=6, column=1)
-
-        self.lblArrTime = tk.Label(data_frame_left, text="ArrTime: ", padx=10, pady=5)
-        self.lblArrTime.grid(row=7, column=0, sticky='w')
-        self.txtArrTime = tk.Entry(data_frame_left, textvariable=ArrTime, width=20)
-        self.txtArrTime.grid(row=7, column=1)
-
-        self.lblAirTime = tk.Label(data_frame_left, text="AirTime: ", padx=10, pady=5)
-        self.lblAirTime.grid(row=8, column=0, sticky='w')
-        self.txtAirTime = tk.Entry(data_frame_left, textvariable=AirTime, width=20)
-        self.txtAirTime.grid(row=8, column=1)
-
-        self.lblOrigin = tk.Label(data_frame_left, text="Origin: ", padx=10, pady=5)
-        self.lblOrigin.grid(row=9, column=0, sticky='w')
+        self.lblOrigin = tk.Label(data_frame_left, text="Origin: ", padx=5, pady=3)
+        self.lblOrigin.grid(row=6, column=0, sticky='w')
         self.txtOrigin = tk.Entry(data_frame_left, textvariable=Origin, width=20)
-        self.txtOrigin.grid(row=9, column=1)
+        self.txtOrigin.grid(row=6, column=1)
 
-        self.lblDest = tk.Label(data_frame_left, text="Dest: ", padx=10, pady=5)
-        self.lblDest.grid(row=10, column=0, sticky='w')
+        self.lblDest = tk.Label(data_frame_left, text="Destination: ", padx=5, pady=3)
+        self.lblDest.grid(row=7, column=0, sticky='w')
         self.txtDest = tk.Entry(data_frame_left, textvariable=Dest, width=20)
-        self.txtDest.grid(row=10, column=1)
+        self.txtDest.grid(row=7, column=1)
 
-        self.lblTailnum = tk.Label(data_frame_left, text="Tailnum: ", padx=10, pady=5)
-        self.lblTailnum.grid(row=11, column=0, sticky='w')
+        self.lblTailnum = tk.Label(data_frame_left, text="Tail Number: ", padx=5, pady=3)
+        self.lblTailnum.grid(row=8, column=0, sticky='w')
         self.txtTailnum = tk.Entry(data_frame_left, textvariable=Tailnum, width=20)
-        self.txtTailnum.grid(row=11, column=1)
+        self.txtTailnum.grid(row=8, column=1)
 
-        self.lblCarrierShort = tk.Label(data_frame_left, text="CarrierShort: ", padx=10, pady=5)
-        self.lblCarrierShort.grid(row=12, column=0, sticky='w')
+        self.lblCarrierShort = tk.Label(data_frame_left, text="Carrier Shortform: ", padx=5, pady=3)
+        self.lblCarrierShort.grid(row=9, column=0, sticky='w')
         self.txtCarrierShort = tk.Entry(data_frame_left, textvariable=CarrierShort, width=20)
-        self.txtCarrierShort.grid(row=12, column=1)
+        self.txtCarrierShort.grid(row=9, column=1)
 
-        self.lblCarrierName = tk.Label(data_frame_left, text="CarrierName: ", padx=10, pady=5)
-        self.lblCarrierName.grid(row=13, column=0, sticky='w')
+        self.lblCarrierName = tk.Label(data_frame_left, text="Carrier Name: ", padx=5, pady=3)
+        self.lblCarrierName.grid(row=10, column=0, sticky='w')
         self.txtCarrierName = tk.Entry(data_frame_left, textvariable=CarrierName, width=20)
-        self.txtCarrierName.grid(row=13, column=1)
+        self.txtCarrierName.grid(row=10, column=1)
 
+        sbVertical = tk.Scrollbar(data_frame_right, orient='vertical')
+        sbVertical.grid(row=0, column=1, sticky='ns')
+        sbHorizontal = tk.Scrollbar(data_frame_right, orient='horizontal')
+        sbHorizontal.grid(row=1, column=0, sticky='we')
 
-    def show_data(self):
-        i=0
-        for row in fbe.ViewAllData():
-            # print(1)
-            print(row)
-            i+=1
-            if i==10:
-                break
+        FlightList = tk.Listbox(data_frame_right, font='Arial 12 bold', yscrollcommand=sbVertical.set, xscrollcommand=sbHorizontal.set)
+        FlightList.bind("<<ListboxSelect>>", flightdatafill)
+        FlightList.grid(row=0, column=0, sticky='nesw')
+        sbVertical.config(command=FlightList.yview)
+        sbHorizontal.config(command=FlightList.xview)
+        FlightList.insert(tk.END, headers)
+
+        # Buttons
+        self.btnSearch = tk.Button(btn_frame, text="Search", command=searchflightdb)
+        self.btnSearch.pack(side='right', padx=5, pady=3)
+        self.btnDisplay = tk.Button(btn_frame, text='Display All', command=viewflightdb)
+        self.btnDisplay.pack(side='right', padx=5, pady=3)
 
 
 class Passenger_window(Starting_window):

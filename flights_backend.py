@@ -13,9 +13,9 @@ def init_db():
     con.commit()
     cur.execute("CREATE TABLE Aircraft(tailnum text, carrier_name text, PRIMARY KEY(tailnum), FOREIGN KEY(carrier_name) REFERENCES Carrier(carrier_name));")
     con.commit()
-    cur.execute("CREATE TABLE Dates(date_idx integer, day integer, month integer, year integer, PRIMARY KEY(date_idx));")
+    cur.execute("CREATE TABLE Dates(date_idx text, day text, month text, year text, PRIMARY KEY(date_idx));")
     con.commit()
-    cur.execute("CREATE TABLE Flight(flightno integer, date_idx integer, scheduled_dept_time integer, dept_time integer, scheduled_arr_time integer, arr_time integer, air_time integer, origin text, dest text, tailnum text, PRIMARY KEY(flightno, date_idx), FOREIGN KEY(date_idx) REFERENCES Dates(date_idx), FOREIGN KEY(tailnum) REFERENCES Aircraft(tailnum));")
+    cur.execute("CREATE TABLE Flight(flightno text, date_idx text, scheduled_dept_time text, dept_time text, scheduled_arr_time text, arr_time text, air_time text, origin text, dest text, tailnum text, PRIMARY KEY(flightno, date_idx), FOREIGN KEY(date_idx) REFERENCES Dates(date_idx), FOREIGN KEY(tailnum) REFERENCES Aircraft(tailnum));")
     con.commit()
     flight_records = csv.reader(open(flights_db_path, "r"))
     head = True
@@ -67,12 +67,16 @@ def ViewAllData():
     con.close()
     return rows
 
-def SearchForData(FlightNo="", Day="", Month="", Year="", SchedDeptTime="", SchedArrTime="", DeptTime="", ArrTime="", AirTime="", Origin="", Dest="", Tailnum="", CarrierShort="", CarrierName=""):
+def SearchForData(SearchTerms):
     con=sqlite3.connect(flights_db)    
     cur=con.cursor()
-    cur.execute("SELECT * FROM Flight f inner join Dates d using(date_idx) inner join Aircraft a using(tailnum) inner join Carrier c using(carrier_name) \
-                WHERE flight=? OR day=? OR month=? OR year=? OR sched_dep_time=? OR dep_time=? OR sched_arr_time=? OR arr_time=? OR air_time=? OR origin=? OR dest=? OR tailnum=? OR carrier_name=? OR full_name LIKE \"%?%\"", 
-                [FlightNo, Day, Month, Year, SchedDeptTime, SchedArrTime, DeptTime, ArrTime, AirTime, Origin, Dest, Tailnum, CarrierShort, CarrierName])
+    query = "SELECT * FROM Flight f inner join Dates d using(date_idx) inner join Aircraft a using(tailnum) inner join Carrier c using(carrier_name)"
+    if len(SearchTerms)!=0:
+        query += " WHERE "
+        for name, data in SearchTerms.items():
+            query+=name+"=\""+data+"\" AND "
+        query = query[:-4]
+    cur.execute(query)
     rows=cur.fetchall()
     con.close()
     return rows
