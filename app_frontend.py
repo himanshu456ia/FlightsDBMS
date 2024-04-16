@@ -136,7 +136,7 @@ class Flight_window(Starting_window):
         
         def flightdatafill(event):
             selected_item = tree.selection()[0]
-            info_to_show = 'Data in Record:\n' + '\n'.join([a+": "+b for a, b in zip(headers, tree.item(selected_item)['values'])])
+            info_to_show = 'Data in Record:\n' + '\n'.join([str(a)+": "+str(b) for a, b in zip(headers, tree.item(selected_item)['values'])])
             messagebox.showinfo(title="Selected Record", message=info_to_show)
 
 
@@ -178,9 +178,6 @@ class Flight_window(Starting_window):
 
         # self.lblRightTitle = tk.Label(data_frame_right, text="Right Portion Title", font='Arial 12 bold', fg='black', bg='white')
         # self.lblRightTitle.grid( row=0, column=0,sticky='nesw')
-
-
-
 
         self.lblFlightno = Ctk.CTkLabel(data_frame_left, text="Flight No: ", pady=3, font=('Arial', 15) )
         self.lblFlightno.grid(row=1, column=0, sticky='w',padx=10,pady=(30,0))
@@ -232,6 +229,7 @@ class Flight_window(Starting_window):
        
         tree = ttk.Treeview(data_frame_right, columns=headers, show='headings')
         tree.grid(row=0, column=0, sticky='nesw')
+        tree.bind("<<TreeviewSelect>>", flightdatafill)
         data_frame_right.columnconfigure(0, weight=1)  # Set weight of the first column
 
         # Set width of each column to 40
@@ -247,9 +245,27 @@ class Flight_window(Starting_window):
 
        # Buttons
         self.btnSearch = Ctk.CTkButton(data_frame_left, text="Search",width=25 ,command=searchflightdb,fg_color="#065e99", border_color="#065e99" , border_width=2, hover_color="#065e99")
-        self.btnSearch.place( anchor="center", relx=0.6, rely=0.5) # Adjust row and column as needed
+        self.btnSearch.place( anchor="center", relx=0.3, rely=0.5) # Adjust row and column as needed
         self.btnDisplay = Ctk.CTkButton(data_frame_left, text='Display All',width=15, command=viewflightdb, fg_color="#065e99", border_color="#065e99" , border_width=2, hover_color="#065e99")
-        self.btnDisplay.place( anchor="center", relx=0.3, rely=0.5)  # Adjust row and column as needed
+        self.btnDisplay.place( anchor="center", relx=0.5, rely=0.5)  # Adjust row and column as needed
+        self.btnBack = Ctk.CTkButton(
+            data_frame_left,
+            text="Go Back",
+            width=15,
+            command=self.backFunction,
+            fg_color="#065e99",
+            border_color="#065e99",
+            border_width=2,
+            hover_color="#065e99",
+        )
+        self.btnBack.place(anchor="center", relx=0.7, rely=0.5)
+    
+    def backFunction(self):
+        # Function handling actions after pressing back
+        clear_frame(self.root)
+        Starting_window(self.root)
+
+
 class Passenger_window(Starting_window):
     def __init__(self, master):
         self.root = master
@@ -290,7 +306,7 @@ class Passenger_window(Starting_window):
         
         def passengersdatafill(event):
             selected_item = tree.selection()[0]
-            info_to_show = 'Data in Record:\n' + '\n'.join([a + ": " + b for a, b in zip(headers, tree.item(selected_item)['values'])])
+            info_to_show = 'Data in Record:\n' + '\n'.join([str(a) + ": " + str(b) for a, b in zip(headers, tree.item(selected_item)['values'])])
             messagebox.showinfo(title="Selected Record", message=info_to_show)
 
         # Frames
@@ -386,6 +402,7 @@ class Passenger_window(Starting_window):
         self.txtContinentName.grid(row=12, column=1, padx=0, pady=3)
         
         tree = ttk.Treeview(data_frame_right, columns=headers, show='headings')
+        tree.bind("<<TreeviewSelect>>", passengersdatafill)
         tree.grid(row=0, column=0, sticky='nesw')
         data_frame_right.columnconfigure(0, weight=1)
 
@@ -401,9 +418,25 @@ class Passenger_window(Starting_window):
 
         # Buttons
         self.btnSearch = Ctk.CTkButton(data_frame_left, text="Search", width=25, command=searchpassengersdb, fg_color="#065e99", border_color="#065e99", border_width=2, hover_color="#065e99")
-        self.btnSearch.place(anchor="center", relx=0.6, rely=0.68)
+        self.btnSearch.place(anchor="center", relx=0.3, rely=0.68)
         self.btnDisplay = Ctk.CTkButton(data_frame_left, text='Display All', width=15, command=viewpassengersdb, fg_color="#065e99", border_color="#065e99", border_width=2, hover_color="#065e99")
-        self.btnDisplay.place(anchor="center", relx=0.3, rely=0.68)
+        self.btnDisplay.place(anchor="center", relx=0.5, rely=0.68)
+        self.btnBack = Ctk.CTkButton(
+            data_frame_left,
+            text="Go Back",
+            width=15,
+            command=self.backFunction,
+            fg_color="#065e99",
+            border_color="#065e99",
+            border_width=2,
+            hover_color="#065e99",
+        )
+        self.btnBack.place(anchor="center", relx=0.7, rely=0.68)
+
+    def backFunction(self):
+        # Function handling actions after pressing back
+        clear_frame(self.root)
+        Starting_window(self.root)
       
 
 if __name__ == "__main__":
