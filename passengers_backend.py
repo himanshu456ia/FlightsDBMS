@@ -16,7 +16,7 @@ def init_db():
     cur.execute("CREATE TABLE Passenger(id TEXT, Fname TEXT,Lname TEXT ,gender TEXT, age TEXT, nationality TEXT, PRIMARY KEY(id));")
     con.commit()
     
-    cur.execute("CREATE TABLE Country(country_code TEXT, country_name TEXT, continent_code TEXT,PRIMARY KEY(country_name), FOREIGN KEY(continent_code) REFERENCES Continent(continent_code));")
+    cur.execute("CREATE TABLE Country(country_code TEXT, country_name TEXT, continent_code TEXT,PRIMARY KEY(country_code), FOREIGN KEY(continent_code) REFERENCES Continent(continent_code));")
     con.commit()
     
     cur.execute("CREATE TABLE Airport(airport_code TEXT , airport_name TEXT, country_code TEXT, PRIMARY KEY(airport_code), FOREIGN KEY(country_code) REFERENCES Country(country_code));")
